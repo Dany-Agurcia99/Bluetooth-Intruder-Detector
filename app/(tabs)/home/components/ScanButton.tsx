@@ -2,25 +2,20 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native"
 import React, { useState } from "react"
 import { COLORS } from "@/constants/colors"
 
-const ScanButton = () => {
-  const [isScanning, setIsScanning] = useState(false)
-
-  const handleScan = async () => {
-    if (isScanning) return
-    console.log("Scanning...")
-    setIsScanning(true)
-    setTimeout(() => {
-      setIsScanning(false)
-    }, 3000)
-  }
-
+const ScanButton = ({
+  onScan,
+  isScanning,
+}: {
+  onScan: () => void
+  isScanning: boolean
+}) => {
   return (
     <TouchableOpacity
       style={[
         styles.button,
         { backgroundColor: isScanning ? COLORS.gray : COLORS.primary },
       ]}
-      onPress={handleScan}
+      onPress={onScan}
       disabled={isScanning}
       activeOpacity={0.8}
     >

@@ -2,37 +2,18 @@ import { View, Text, StyleSheet, FlatList } from "react-native"
 import React from "react"
 import { COLORS } from "@/constants/colors"
 import DeviceCard from "./DeviceCard"
+import Device from "@/types/device"
 
-type Device = {
-  id: string
-  name: string
-  rssi: number
-}
-
-const mockDevices: Device[] = [
-  { id: "AA:BB:CC:DD:EE:01", name: "iPhone 13", rssi: -45 },
-  { id: "AA:BB:CC:DD:EE:02", name: "Samsung Galaxy", rssi: -67 },
-  { id: "AA:BB:CC:DD:EE:03", name: "MacBook Pro", rssi: -32 },
-  { id: "AA:BB:CC:DD:EE:04", name: "AirPods Pro", rssi: -78 },
-  { id: "AA:BB:CC:DD:EE:05", name: "Unknown Device", rssi: -89 },
-  { id: "AA:BB:CC:DD:EE:06", name: "Apple Watch", rssi: -56 },
-]
-
-const DeviceList = () => {
-  const renderDevice = ({ item }: { item: Device }) => {
-    return <DeviceCard device={item} />
-  }
-
+const DeviceList = ({ devices }: { devices: Device[] }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Detected Devices ({mockDevices.length})</Text>
+      <Text style={styles.title}>Detected Devices ({devices.length})</Text>
       <FlatList
-        data={mockDevices}
-        renderItem={renderDevice}
+        data={devices}
+        renderItem={({ item }) => <DeviceCard device={item} />}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
     </View>
   )
@@ -43,16 +24,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
     color: COLORS.lightText,
     marginBottom: 16,
   },
   listContainer: {
     paddingBottom: 16,
-  },
-  separator: {
-    height: 12,
+    gap: 16,
   },
 })
 

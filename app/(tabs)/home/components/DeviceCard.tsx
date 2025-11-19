@@ -1,12 +1,7 @@
 import { View, Text, StyleSheet } from "react-native"
 import React from "react"
 import { COLORS } from "@/constants/colors"
-
-type Device = {
-  id: string
-  name: string
-  rssi: number
-}
+import Device from "@/types/device"
 
 type DeviceCardProps = {
   device: Device
@@ -21,9 +16,9 @@ const DeviceCard = ({ device }: DeviceCardProps) => {
   }
 
   const getSignalColor = (rssi: number) => {
-    if (rssi > -50) return "#4CAF50" // Green
-    if (rssi > -60) return "#FFC107" // Amber
-    if (rssi > -70) return "#FF9800" // Orange
+    if (rssi > -50) return "#306a32ff" // Green
+    if (rssi > -60) return "#e2aa00ff" // Amber
+    if (rssi > -70) return "#d85e20ff" // Orange
     return "#F44336" // Red
   }
 
