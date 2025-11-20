@@ -8,18 +8,20 @@ type DeviceCardProps = {
 }
 
 const DeviceCard = ({ device }: DeviceCardProps) => {
-  const getSignalStrength = (rssi: number) => {
-    if (rssi > -50) return "Excellent"
-    if (rssi > -60) return "Good"
-    if (rssi > -70) return "Fair"
-    return "Poor"
+  const getSignalStrength = (rssi: number, trusted?: boolean) => {
+    if (trusted) return "Trusted"
+    if (rssi > -50) return "Very Near"
+    if (rssi > -60) return "Near"
+    if (rssi > -70) return "Far"
+    return "Very Far"
   }
 
-  const getSignalColor = (rssi: number) => {
-    if (rssi > -50) return "#306a32ff" // Green
-    if (rssi > -60) return "#e2aa00ff" // Amber
-    if (rssi > -70) return "#d85e20ff" // Orange
-    return "#F44336" // Red
+  const getSignalColor = (rssi: number, trusted?: boolean) => {
+    if (trusted) return "#4CAF50" // Blue
+    if (rssi > -50) return "#F44336" // Green
+    if (rssi > -60) return "#d85e20ff" // Amber
+    if (rssi > -70) return "#e2aa00ff" // Orange
+    return "#306a32ff" // Red
   }
 
   return (
