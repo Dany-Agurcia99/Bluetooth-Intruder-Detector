@@ -8,8 +8,7 @@ type DeviceCardProps = {
 }
 
 const DeviceCard = ({ device }: DeviceCardProps) => {
-  const getSignalStrength = (rssi: number, trusted?: boolean) => {
-    if (trusted) return "Trusted"
+  const getSignalStrength = (rssi: number) => {
     if (rssi > -50) return "Very Near"
     if (rssi > -60) return "Near"
     if (rssi > -70) return "Far"
@@ -39,7 +38,7 @@ const DeviceCard = ({ device }: DeviceCardProps) => {
           ]}
         >
           <Text style={styles.signalText}>
-            {getSignalStrength(device.rssi, device.trusted)}
+            {getSignalStrength(device.rssi)}
           </Text>
         </View>
       </View>
@@ -50,20 +49,15 @@ const DeviceCard = ({ device }: DeviceCardProps) => {
         <View style={styles.rssiContainer}>
           <Text style={styles.rssiLabel}>Signal Strength:</Text>
           <Text
-            style={[
-              styles.rssiValue,
-              { color: getSignalColor(device.rssi, device.trusted) },
-            ]}
+            style={[styles.rssiValue, { color: getSignalColor(device.rssi) }]}
           >
             {device.rssi} dBm
           </Text>
         </View>
 
-        {!device.trusted && (
-          <TouchableOpacity style={styles.trustButton} onPress={handleTrust}>
-            <Text style={styles.trustButtonText}>Trust</Text>
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity style={styles.trustButton} onPress={handleTrust}>
+          <Text style={styles.trustButtonText}>Trust</Text>
+        </TouchableOpacity>
       </View>
     </View>
   )

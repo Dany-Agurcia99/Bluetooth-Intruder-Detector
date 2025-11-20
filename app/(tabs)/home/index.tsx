@@ -1,16 +1,24 @@
 import ScreenWrapper from "@/components/ScreenWrapper"
 import ScanButton from "./components/ScanButton"
 import DeviceList from "./components/DeviceList"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Device from "@/types/device"
 import { BleManager } from "react-native-ble-plx"
 import { Platform, PermissionsAndroid } from "react-native"
+import {
+  getWhitelist,
+  addToWhitelist,
+  removeFromWhitelist,
+} from "@/storage/whitelist"
 
 const manager = new BleManager()
 
 const HomeScreenLayout = () => {
   const [isScanning, setIsScanning] = useState(false)
   const [devices, setDevices] = useState<Device[]>([])
+  const [trustedList, setTrustedList] = useState<string[]>([])
+
+ 
 
   async function requestBlePermissions() {
     if (Platform.OS === "android") {
@@ -48,6 +56,9 @@ const HomeScreenLayout = () => {
       }
 
       if (device) {
+        // Si está en whitelist -> ignorar (según tu petición)
+        if (trustedList.includes(device.id)) return
+
         setDevices((prev) => {
           const exists = prev.find((d) => d.id === device.id)
           if (exists) return prev
