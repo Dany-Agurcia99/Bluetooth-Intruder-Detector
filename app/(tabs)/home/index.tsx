@@ -2,15 +2,15 @@ import ScreenWrapper from "@/components/ScreenWrapper"
 import ScanButton from "./components/ScanButton"
 import DeviceList from "./components/DeviceList"
 import { useState } from "react"
-import DeviceType from "@/types/device"
-import { BleManager, Device } from "react-native-ble-plx"
+import Device from "@/types/device"
+import { BleManager } from "react-native-ble-plx"
 import { Platform, PermissionsAndroid } from "react-native"
 
 const manager = new BleManager()
 
 const HomeScreenLayout = () => {
   const [isScanning, setIsScanning] = useState(false)
-  const [devices, setDevices] = useState<DeviceType[]>([])
+  const [devices, setDevices] = useState<Device[]>([])
 
   async function requestBlePermissions() {
     if (Platform.OS === "android") {
@@ -52,7 +52,7 @@ const HomeScreenLayout = () => {
           const exists = prev.find((d) => d.id === device.id)
           if (exists) return prev
 
-          const deviceData: DeviceType = {
+          const deviceData: Device = {
             id: device.id,
             name: device.name || "Unknown Device",
             rssi: device.rssi || -100,

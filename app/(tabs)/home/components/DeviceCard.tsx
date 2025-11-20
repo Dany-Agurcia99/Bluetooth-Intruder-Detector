@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native"
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
 import React from "react"
 import { COLORS } from "@/constants/colors"
 import Device from "@/types/device"
@@ -17,11 +17,15 @@ const DeviceCard = ({ device }: DeviceCardProps) => {
   }
 
   const getSignalColor = (rssi: number, trusted?: boolean) => {
-    if (trusted) return "#4CAF50" // Blue
-    if (rssi > -50) return "#F44336" // Green
-    if (rssi > -60) return "#d85e20ff" // Amber
-    if (rssi > -70) return "#e2aa00ff" // Orange
-    return "#306a32ff" // Red
+    if (trusted) return "#4CAF50" // Green
+    if (rssi > -50) return "#F44336" // Red
+    if (rssi > -60) return "#d85e20ff" // Orange
+    if (rssi > -70) return "#e2aa00ff" // Yellow
+    return "#306a32ff" // Dark Green
+  }
+
+  const handleTrust = () => {
+    console.log("Trusting " + device.id)
   }
 
   return (
@@ -31,24 +35,35 @@ const DeviceCard = ({ device }: DeviceCardProps) => {
         <View
           style={[
             styles.signalBadge,
-            { backgroundColor: getSignalColor(device.rssi) },
+            { backgroundColor: getSignalColor(device.rssi, device.trusted) },
           ]}
         >
           <Text style={styles.signalText}>
-            {getSignalStrength(device.rssi)}
+            {getSignalStrength(device.rssi, device.trusted)}
           </Text>
         </View>
       </View>
 
       <Text style={styles.deviceId}>ID: {device.id}</Text>
 
-      <View style={styles.rssiContainer}>
-        <Text style={styles.rssiLabel}>Signal Strength:</Text>
-        <Text
-          style={[styles.rssiValue, { color: getSignalColor(device.rssi) }]}
-        >
-          {device.rssi} dBm
-        </Text>
+      <View style={styles.bottomRow}>
+        <View style={styles.rssiContainer}>
+          <Text style={styles.rssiLabel}>Signal Strength:</Text>
+          <Text
+            style={[
+              styles.rssiValue,
+              { color: getSignalColor(device.rssi, device.trusted) },
+            ]}
+          >
+            {device.rssi} dBm
+          </Text>
+        </View>
+
+        {!device.trusted && (
+          <TouchableOpacity style={styles.trustButton} onPress={handleTrust}>
+            <Text style={styles.trustButtonText}>Trust</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   )
@@ -96,9 +111,13 @@ const styles = StyleSheet.create({
     fontFamily: "monospace",
     marginBottom: 8,
   },
-  rssiContainer: {
+  bottomRow: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+  },
+  rssiContainer: {
+    flexDirection: "row",
     alignItems: "center",
   },
   rssiLabel: {
@@ -106,6 +125,20 @@ const styles = StyleSheet.create({
     color: COLORS.lightText,
   },
   rssiValue: {
+    fontSize: 14,
+    fontWeight: "600",
+    marginLeft: 12,
+  },
+  trustButton: {
+    borderWidth: 1,
+    borderColor: COLORS.primary,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+    marginLeft: 8,
+  },
+  trustButtonText: {
+    color: COLORS.primary,
     fontSize: 14,
     fontWeight: "600",
   },
